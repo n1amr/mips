@@ -1,13 +1,13 @@
 module Sign_extend (in , out );
-input  [15:0]in ;
-output [31:0]out ;
+  input  [15:0]in ;
+  output [31:0]out ;
 
-assign {out}= in ;
-
+  assign out = { {16{in[15]}}, in };
 endmodule
+
 module SignExtend_testbench();
- reg [15:0]a;
- wire [31:0] b;
+  reg [15:0]a;
+  wire [31:0] b;
 
   Sign_extend try (a, b);
 
