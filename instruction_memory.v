@@ -2,16 +2,12 @@ module InstructionMemory(read_address, instruction);
   input [31:0] read_address;
   output [31:0] instruction;
 
-  reg [7:0] mem [0:255];
+  reg [31:0] mem [0:255];
   assign instruction = mem[read_address];
-
-  integer i;
 
   // Initialize memory
   initial begin
-    for(i = 0; i < 256; i = i + 1) begin
-      mem[i] = 8'b0000_0000;
-    end
+    $readmemb("instruction-memory.mem", mem);
   end
 endmodule
 
