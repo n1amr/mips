@@ -3,7 +3,7 @@ module InstructionMemory(read_address, instruction);
   output [31:0] instruction;
 
   reg [31:0] mem [0:255];
-  assign instruction = mem[read_address];
+  assign instruction = mem[read_address >> 2];
 
   // Initialize memory
   initial begin
@@ -19,8 +19,8 @@ module InstructionMemory_testbench();
 
   initial begin
     #5 read_address <= 0;
-    #5 read_address <= 10;
-    #5 read_address <= 2;
+    #5 read_address <= 4;
     #5 read_address <= 8;
+    #5 read_address <= 12;
   end
 endmodule
