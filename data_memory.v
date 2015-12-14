@@ -1,15 +1,17 @@
-module DataMemory(address, write_data, MemRead, MemWrite, read_data);
+module DataMemory(address, write_data, MemRead, MemWrite, clk, read_data);
   input [31:0] address, write_data;
-  input MemRead, MemWrite;
+  input MemRead, MemWrite, clk;
   output reg [31:0] read_data;
 
   reg [31:0] mem [0:255];
 
-  always @ (address or write_data or MemWrite or MemRead) begin
+  always @ (MemRead or address or mem[address]) begin
+    #100 read_data = mem[address >> 2];
+  end
+
+  always @ (negedge clk) begin
     if(MemWrite) begin
-      mem[address >> 2] = write_data;
-    end else if(MemRead) begin
-      read_data <= mem[address >> 2];
+      #100 mem[address >> 2] = write_data;
     end
   end
 
@@ -20,10 +22,15 @@ endmodule
 
 module DataMemory_testbench();
   reg [31:0] address, write_data;
-  reg MemRead, MemWrite;
+  reg MemRead, MemWrite, clk;
   wire [31:0] read_data;
 
-  DataMemory mem(address, write_data, MemRead, MemWrite, read_data);
+  DataMemory mem(address, write_data, MemRead, MemWrite, clk, read_data);
+
+  initial begin
+    clk = 0;
+    forever #50 clk = ~clk;
+  end
 
   integer i;
   initial begin
@@ -32,12 +39,19 @@ module DataMemory_testbench();
     address <= 4;
     write_data <= 32'hffffffff;
 
-    #15
+    #200
     
     MemRead = 1;
     MemWrite = 0;
-    for(i = 0; i < 256; i = i + 1) begin
-      #5 address <= i << 2;
+    for(i = 0; i < 4; i = i + 1) begin
+      #100 address <= i << 2;
     end
+
+    #200 $finish;
+  end
+
+  initial begin
+    $dumpfile("DataMemory_testbench.vcd");
+    $dumpvars(0, DataMemory_testbench);
   end
 endmodule
