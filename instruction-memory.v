@@ -23,4 +23,9 @@ module InstructionMemory_testbench();
     #5 read_address <= 8;
     #5 read_address <= 12;
   end
+
+  initial begin
+    $dumpfile("InstructionMemory_testbench.vcd");
+    $dumpvars(0, InstructionMemory_testbench);
+  end
 endmodule
