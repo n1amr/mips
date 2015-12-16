@@ -1,10 +1,10 @@
 module Adder(a, b, result);
   input [31:0] a, b;
-  output reg [31:0] result;
+  output  [31:0] result;
 
-  always @ (a or b) begin
-    result <= a + b;
-  end
+  
+   assign result = a + b;
+ 
 endmodule
 
 module Adder_testbench();
