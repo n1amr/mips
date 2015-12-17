@@ -5,7 +5,7 @@ module ALU(result, zero, a, b, alu_control,clk);
   output reg [31:0] result;
   output reg zero;
 
-always @ (posedge clk) begin
+always @ (a,b,alu_control) begin
       zero<=1'b0;
       case(alu_control)
       //add    
