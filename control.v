@@ -3,10 +3,19 @@ module Control(opcode, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSr
   output reg Branch, MemRead, MemWrite, ALUSrc, RegWrite;
   output reg [1:0] ALUOp, RegDst, MemtoReg;
   
+  parameter [5:0]
+    RFORMAT = 6'd0,
+    ADDI = 6'd8,
+    ANDI = 6'd12,
+    LW = 6'd35,
+    SW = 6'd43,
+    BEQ = 6'd4,
+    JAL = 6'd3;
+
+
   always @(opcode) begin
     case (opcode)
-      // Rformat
-      6'b000000: begin
+      RFORMAT: begin
         RegDst <= 2'b01;
         ALUSrc <= 1'b0;
         MemtoReg <= 2'b00;
@@ -17,8 +26,7 @@ module Control(opcode, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSr
         ALUOp <= 2'b10;
       end
       
-      // addi              
-      6'b001000: begin
+      ADDI: begin
         RegDst <= 2'b00;
         ALUSrc <= 1'b1;
         MemtoReg <= 2'b00;
@@ -29,8 +37,7 @@ module Control(opcode, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSr
         ALUOp <= 2'b00;            
       end
       
-      //andi
-      6'b001100: begin
+      ANDI: begin
         RegDst <= 2'b00;
         ALUSrc <= 1'b1;
         MemtoReg <= 2'b00;
@@ -41,8 +48,7 @@ module Control(opcode, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSr
         ALUOp <= 2'b11;            
       end
       
-      // lw 
-      6'b100011: begin 
+      LW: begin 
         RegDst <= 2'b00;
         ALUSrc <= 1'b1;
         MemtoReg <= 2'b01;
@@ -53,8 +59,7 @@ module Control(opcode, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSr
         ALUOp <= 2'b00;
       end
     
-      // sw
-      6'b101011: begin
+      SW: begin
         RegDst <= 2'bxx;
         ALUSrc <= 1'b1;
         MemtoReg <= 2'bxx;
@@ -65,8 +70,7 @@ module Control(opcode, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSr
         ALUOp <= 2'b00;
       end
     
-      // beq
-      6'b000100: begin
+      BEQ: begin
         RegDst <= 2'bxx;
         ALUSrc <= 1'b0;
         MemtoReg <= 2'bxx;
@@ -77,8 +81,7 @@ module Control(opcode, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSr
         ALUOp <= 2'b01;
       end
       
-      // jal
-      6'b000011: begin
+      JAL: begin
         RegDst <= 2'b10;
         ALUSrc <= 1'bx;
         MemtoReg <= 2'b10;
@@ -100,14 +103,23 @@ module Control_testbench();
 
   Control control(opcode, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSrc, RegWrite);
 
+  parameter [5:0]
+    RFORMAT = 6'd0,
+    ADDI = 6'd8,
+    ANDI = 6'd12,
+    LW = 6'd35,
+    SW = 6'd43,
+    BEQ = 6'd4,
+    JAL = 6'd3;
+
   initial begin
-    # 10 opcode = 6'd0; // Rformat
-    # 10 opcode = 6'd8; // addi
-    # 10 opcode = 6'd12; // andi
-    # 10 opcode = 6'd35; // lw
-    # 10 opcode = 6'd43; // sw
-    # 10 opcode = 6'd4; // beq
-    # 10 opcode = 6'd3; // jal
+    # 10 opcode = RFORMAT;
+    # 10 opcode = ADDI;
+    # 10 opcode = ANDI;
+    # 10 opcode = LW;
+    # 10 opcode = SW;
+    # 10 opcode = BEQ;
+    # 10 opcode = JAL;
     # 10 $finish;
   end
 
