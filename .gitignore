@@ -1,5 +1,5 @@
-*.mpf
-*.mti
-*.wlf
-work/
-*.bak
+*
+!*.v
+!*.jar
+!*.mips
+!*.mem
