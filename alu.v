@@ -1,42 +1,78 @@
-module ALU(result, zero, a, b, alu_control,clk);
+module ALU (a, b, alu_control, shamt, result, zero);
   input [31:0] a, b;
   input [3:0] alu_control;
-  input clk;
+  input [4:0] shamt;
   output reg [31:0] result;
-  output reg zero;
+  output wire zero;
 
-always @ (a,b,alu_control) begin
-      zero<=1'b0;
-      case(alu_control)
-      //add    
-      4'b0000:       result <= a + b;
-      //addi
-      4'b0001:       result <= a + b; 
-      //lw
-       4'b0010:      result <= a + b; 
-      //sw
-       4'b0011:      result <= a + b; 
-      //sll
-       4'b0100:      result <= a << b; 
-      //and
-       4'b0101:      result <= a & b;
-      //andi
-       4'b0110:      result <=  a & b ;   
-      //nor
-       4'b0111:      result <= ~(a | b) ; 
-       //beq
-       4'b1000:     
-          if(a==b) begin zero<=1'b1; result<=32'b0; end
-       //jal
-       4'b1001:        result<=32'b0;
-       //jr
-       4'b1010:          result <=32'b0;     
-      //slt 
-       4'b1011:         
-	 if(a<b) 
-		result <= 32'b00000000_00000000_00000000_00000001; 
-	else begin result<=32'b0; 
-end
-endcase
+  assign zero = (result == 32'b0)? 1 : 0;
+  
+  parameter [3:0]
+    ADD = 4'b0010,
+    SUB = 4'b0110,
+    SLL = 4'b0011,
+    AND = 4'b0000,
+    NOR = 4'b1100,
+    SLT = 4'b0111,
+    OR = 4'b0001;
+
+  always @ (a, b, alu_control, shamt) begin
+    case(alu_control)
+      ADD:
+        result <= a + b;
+      SUB:
+        result <= a - b;
+      SLL:
+        result <= (a << shamt);
+      AND:
+         result <= a & b;
+      NOR:
+        result <= ~(a | b);
+      SLT:
+        result <= (a < b)? 32'b1 : 32'b0;
+      OR:
+         result <=  a | b;
+    endcase
+  end
+endmodule
+
+module ALU_testbench();
+  reg [31:0] a, b;
+  reg [3:0] alu_control;
+  reg [4:0] shamt;
+  wire [31:0] result;
+  wire zero;
+
+  parameter [3:0]
+    ADD = 4'b0010,
+    SUB = 4'b0110,
+    SLL = 4'b0011,
+    AND = 4'b0000,
+    NOR = 4'b1100,
+    SLT = 4'b0111,
+    OR = 4'b0001;
+
+  ALU alu(a, b, alu_control, shamt, result, zero);
+
+  initial begin
+    a <= 4;
+    b <= 1;
+
+    #5 alu_control = ADD;
+    #5 alu_control = SUB;
+    #5 alu_control = AND;
+    #5 alu_control = NOR;
+    #5 alu_control = SLT;
+    #5 alu_control = OR;
+    
+    #5 alu_control = SLL;
+    #5 shamt = 5'd3;
+    #5 shamt = 5'd4;
+    #5 shamt = 5'd5;
+  end
+
+  initial begin
+    $dumpfile("ALU_testbench.vcd");
+    $dumpvars(0, ALU_testbench);
   end
 endmodule
