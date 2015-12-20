@@ -14,7 +14,7 @@ module RegisterFile(read_reg1, read_reg2, write_reg, write_data, RegWrite, clk, 
     #100 read_data2 = registers[read_reg2];
   end
 
-  always @(posedge clk) begin
+  always @(negedge clk) begin
     if(RegWrite && write_reg != 5'b00000) begin
       #100 registers[write_reg] = write_data;
     end
