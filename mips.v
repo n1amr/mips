@@ -18,7 +18,11 @@ module MIPS;
   wire [15:0] shift;
   wire [25:0] jump_address;
   
-  Decoder decoder(instruction, opcode, rs, rt, rd, shamt, funct, shift, jump_address);
+  Decoder decoder_module(instruction, opcode, rs, rt, rd, shamt, funct, shift, jump_address);
+
+  wire Branch, MemRead, MemWrite, ALUSrc, RegWrite;
+  wire [1:0] ALUOp, RegDst, MemtoReg;
+  Control control_module(opcode, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSrc, RegWrite);
 
   wire [4:0] write_reg;
   RegDstMux reg_dst_mux(write_reg, RegDst, rt, rd);
