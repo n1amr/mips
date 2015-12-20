@@ -1,6 +1,15 @@
 sll $zero, $zero, 0
-START: beq $zero, $zero, END
-addi $s1, $zero, 100
-add $s1, $zero, $t0
+beq $zero, $zero, MAIN
+FUNCTION: addi $s0, $zero, 125
+END_FUNCTION: jr $ra
+sll $zero, $zero, 0
+MAIN: jal 2
+addi $t0, $zero, 0
+addi $t1, $zero, 10
+FOR: slt $t2, $t0, $t1
+beq $t2, $zero, END
+lw $s0, 0($t0)
 addi $t0, $t0, 1
-END: beq $zero, $zero, START
+beq $zero, $zero, FOR
+END: sll $zero, $zero, 0
+EXIT_MAIN: sll $zero, $zero, 0
