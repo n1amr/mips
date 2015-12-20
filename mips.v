@@ -44,6 +44,14 @@ module Mux2_4b(out, select, in0, in1);
   assign out = select? in0 : in1;
 endmodule
 
+module Mux2_32b(out, select, in0, in1);
+  input select;
+  input [31:0] in0, in1;
+  output wire [31:0] out;
+
+  assign out = select == 0? in0 : in1;
+endmodule
+
 module Mux4_32b(out, select, in0, in1, in2, in3);
   input [2:0] select;
   input [31:0] in0, in1, in2, in3;
