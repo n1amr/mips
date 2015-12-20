@@ -2,7 +2,7 @@ module MIPS;
   reg clk;
   initial begin
     clk <= 0;
-    forever #100 clk <= ~clk;
+    forever #500 clk <= ~clk;
   end
 
   wire [31:0] pc, next_pc;
@@ -24,8 +24,15 @@ module MIPS;
   wire [1:0] ALUOp, RegDst, MemtoReg;
   Control control_module(opcode, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSrc, RegWrite);
 
+
   wire [4:0] write_reg;
+  wire [31:0] write_data;
+  wire [31:0] read_data1, read_data2;
+
   RegDstMux reg_dst_mux(write_reg, RegDst, rt, rd);
+  RegisterFile register_file_module(rs, rt, write_reg, write_data, RegWrite, clk, read_data1, read_data2);
+
+  
 
 endmodule
 
