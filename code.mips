@@ -1,4 +1,6 @@
-addi $s1, $zero, 5
-addi $s2, $zero, 10
-add $s3, $s1, $s2
-and $s4, $s1, $s2
+sll $zero, $zero, 0
+START: beq $zero, $zero, END
+addi $s1, $zero, 100
+add $s1, $zero, $t0
+addi $t0, $t0, 1
+END: beq $zero, $zero, START
