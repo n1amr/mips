@@ -1,5 +1,6 @@
 module ALUControl(alucontrol, ALUOp, Funct);
-  input [5:0] ALUOp, Funct;
+  input [1:0] ALUOp;
+  input [5:0] Funct;
   output reg [3:0] alucontrol;
   
   parameter [2:0]
