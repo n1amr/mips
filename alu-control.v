@@ -1,7 +1,8 @@
-module ALUControl(alucontrol, ALUOp, Funct);
+module ALUControl(alucontrol, jr, ALUOp, Funct);
   input [1:0] ALUOp;
   input [5:0] Funct;
   output reg [3:0] alucontrol;
+  output wire jr;
   
   parameter [2:0]
     ADD = 2'b00,
@@ -15,7 +16,8 @@ module ALUControl(alucontrol, ALUOp, Funct);
     AND_FUNCT = 6'd36,
     NOR_FUNCT = 6'd39,
     SLT_FUNCT = 6'd42,
-    SLL_FUNCT = 6'd0;
+    SLL_FUNCT = 6'd0,
+    JR_FUNCT = 6'd8;
   
   // alu control signals
   parameter [3:0]
@@ -27,8 +29,9 @@ module ALUControl(alucontrol, ALUOp, Funct);
     ALU_SLT = 4'b0111,
     ALU_OR = 4'b0001;
 
+  assign jr = (ALUOp == RFORMAT) && (Funct == JR_FUNCT);
   
-  always @(ALUOp or Funct) begin 
+  always @(ALUOp or Funct) begin
     case (ALUOp)
       ADD: begin
         alucontrol <= ALU_ADD;
@@ -58,6 +61,10 @@ module ALUControl(alucontrol, ALUOp, Funct);
 
           SLL_FUNCT: begin
             alucontrol <= ALU_SLL;
+          end
+
+          JR_FUNCT: begin
+            alucontrol <= 2'bxx;
           end
         endcase
       end

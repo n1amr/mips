@@ -1,7 +1,8 @@
-module Control(opcode, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSrc, RegWrite);
+module Control(opcode, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSrc, RegWrite, Jal);
   input [5:0] opcode;
   output reg Branch, MemRead, MemWrite, ALUSrc, RegWrite;
   output reg [1:0] ALUOp, RegDst, MemtoReg;
+  output wire Jal;
   
   parameter [5:0]
     RFORMAT = 6'd0,
@@ -12,6 +13,7 @@ module Control(opcode, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSr
     BEQ = 6'd4,
     JAL = 6'd3;
 
+  assign Jal = opcode == JAL;
 
   always @(opcode) begin
     case (opcode)
