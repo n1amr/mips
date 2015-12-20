@@ -1,8 +1,7 @@
 module Control(opcode, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSrc, RegWrite, Jal);
   input [5:0] opcode;
-  output reg Branch, MemRead, MemWrite, ALUSrc, RegWrite;
-  output reg [1:0] ALUOp, RegDst, MemtoReg;
-  output wire Jal;
+  output wire RegWrite, Branch, ALUSrc, MemRead, MemWrite, Jal;
+  output wire [1:0] ALUOp, RegDst, MemtoReg;
   
   parameter [5:0]
     RFORMAT = 6'd0,
@@ -10,91 +9,22 @@ module Control(opcode, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSr
     ANDI = 6'd12,
     LW = 6'd35,
     SW = 6'd43,
-    BEQ = 6'd4,
+    BEQ = 6'd5,
     JAL = 6'd3;
 
-  assign Jal = opcode == JAL;
+  assign Jal = (opcode == JAL);
+  assign Branch = (opcode == BEQ);
+  assign MemRead = (opcode == LW);
+  assign MemWrite = (opcode == SW);
+  assign ALUSrc = (opcode == ADDI || opcode == ANDI || opcode == LW || opcode == SW);
+  assign RegDst[1] = (opcode == JAL);
+  assign RegDst[0] = (opcode == RFORMAT);
+  assign MemtoReg[1] = (opcode == JAL);
+  assign MemtoReg[0] = (opcode == LW);
+  assign RegWrite = (opcode == RFORMAT || opcode == ADDI || opcode == ANDI || opcode == LW || opcode == JAL);
+  assign ALUOp[1] = (opcode == RFORMAT || opcode == ANDI);
+  assign ALUOp[0] = (opcode == ANDI || opcode == BEQ);
 
-  always @(opcode) begin
-    case (opcode)
-      RFORMAT: begin
-        RegDst <= 2'b01;
-        ALUSrc <= 1'b0;
-        MemtoReg <= 2'b00;
-        RegWrite <= 1'b1;
-        MemRead <= 1'b0;
-        MemWrite <= 1'b0;
-        Branch <= 1'b0;
-        ALUOp <= 2'b10;
-      end
-      
-      ADDI: begin
-        RegDst <= 2'b00;
-        ALUSrc <= 1'b1;
-        MemtoReg <= 2'b00;
-        RegWrite <= 1'b1;
-        MemRead <= 1'b0;
-        MemWrite <= 1'b0;
-        Branch <= 1'b0;
-        ALUOp <= 2'b00;            
-      end
-      
-      ANDI: begin
-        RegDst <= 2'b00;
-        ALUSrc <= 1'b1;
-        MemtoReg <= 2'b00;
-        RegWrite <= 1'b1;
-        MemRead <= 1'b0;
-        MemWrite <= 1'b0;
-        Branch <= 1'b0;
-        ALUOp <= 2'b11;            
-      end
-      
-      LW: begin 
-        RegDst <= 2'b00;
-        ALUSrc <= 1'b1;
-        MemtoReg <= 2'b01;
-        RegWrite <= 1'b1;
-        MemRead <= 1'b1;
-        MemWrite <= 1'b0;
-        Branch <= 1'b0;
-        ALUOp <= 2'b00;
-      end
-    
-      SW: begin
-        RegDst <= 2'bxx;
-        ALUSrc <= 1'b1;
-        MemtoReg <= 2'bxx;
-        RegWrite <= 1'b0;
-        MemRead <= 1'b0;
-        MemWrite <= 1'b1;
-        Branch <= 1'b0;
-        ALUOp <= 2'b00;
-      end
-    
-      BEQ: begin
-        RegDst <= 2'bxx;
-        ALUSrc <= 1'b0;
-        MemtoReg <= 2'bxx;
-        RegWrite <= 1'b0;
-        MemRead <= 1'b0;
-        MemWrite <= 1'b0;
-        Branch <= 1'b1;
-        ALUOp <= 2'b01;
-      end
-      
-      JAL: begin
-        RegDst <= 2'b10;
-        ALUSrc <= 1'bx;
-        MemtoReg <= 2'b10;
-        RegWrite <= 1'b1;
-        MemRead <= 1'b0;
-        MemWrite <= 1'b0;
-        Branch <= 1'b0;
-        ALUOp <= 2'bxx;
-      end
-    endcase
-  end
 endmodule
 
 module Control_testbench();
