@@ -30,7 +30,7 @@ module ALUControl(alucontrol, jr, sign, ALUOp, Funct);
     ALU_OR = 4'b0001;
 
   assign jr = (ALUOp == RFORMAT) && (Funct == JR_FUNCT);
-  assign sign = !(ALUOp == AND || ((ALUOp == RFORMAT) && (Funct == AND_FUNCT)));
+  assign sign = !(ALUOp == AND);
   
   always @(ALUOp or Funct) begin
     case (ALUOp)
