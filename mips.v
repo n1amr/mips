@@ -11,8 +11,9 @@ module MIPS;
   wire [4:0] rs, rt, rd, shamt;
   wire [15:0] shift;
   wire [25:0] jump_address;
-  wire Branch, MemRead, MemWrite, ALUSrc, RegWrite, Jal;
-  wire [1:0] ALUOp, RegDst, MemtoReg;
+  wire Branch, MemRead, MemWrite, ALUSrc, RegWrite, Jal, MemDataSign;
+  wire [1:0] ALUOp, RegDst, MemtoReg, MemDataSize;
+  wire SignExtend;
   wire [4:0] reg_file_write_reg;
   wire [31:0] reg_file_write_data;
   wire [31:0] reg_file_read_data1, reg_file_read_data2;
@@ -44,21 +45,20 @@ module MIPS;
   
   Decoder decoder_module(instruction, opcode, rs, rt, rd, shamt, funct, shift, jump_address);
   
-  Control control_module(opcode, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSrc, RegWrite, Jal);
-  
+  Control control_module(opcode, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSrc, RegWrite, Jal, MemDataSize, MemDataSign);
+
   Mux4_5b reg_dst_mux(reg_file_write_reg, RegDst, rt, rd, 31, 4'bx);
   
   RegisterFile register_file_module(rs, rt, reg_file_write_reg, reg_file_write_data, RegWrite_unless_jr, clk, reg_file_read_data1, reg_file_read_data2);
-  
-  ALUControl alu_control_module(alu_control, jr, ALUOp, funct);
-  
-  Sign_extend sign_extend_module(shift, sign_extended_shift);
-  
+  ALUControl alu_control_module(alu_control, jr, SignExtend, ALUOp, funct);
+
+  Sign_extend sign_extend_module(shift, SignExtend,sign_extended_shift);
+
   Mux2_32b alu_src_mux(alu_input_b, ALUSrc, reg_file_read_data2, sign_extended_shift);
   
   ALU alu_module(reg_file_read_data1, alu_input_b, alu_control, shamt, alu_output, alu_zero);
   
-  DataMemory data_memory_module(alu_output, reg_file_read_data2, MemRead, MemWrite, clk, data_mem_output);
+  DataMemory data_memory_module(alu_output, reg_file_read_data2, MemRead, MemWrite, MemDataSize, MemDataSign, clk, data_mem_output);
   
   Mux4_32b mem_to_reg_mux(reg_file_write_data, MemtoReg, alu_output, data_mem_output, pc_plus_4, 32'bx);
   

@@ -1,8 +1,8 @@
-module ALUControl(alucontrol, jr, ALUOp, Funct);
+module ALUControl(alucontrol, jr, sign, ALUOp, Funct);
   input [1:0] ALUOp;
   input [5:0] Funct;
   output reg [3:0] alucontrol;
-  output wire jr;
+  output wire jr, sign;
   
   parameter [2:0]
     ADD = 2'b00,
@@ -30,6 +30,7 @@ module ALUControl(alucontrol, jr, ALUOp, Funct);
     ALU_OR = 4'b0001;
 
   assign jr = (ALUOp == RFORMAT) && (Funct == JR_FUNCT);
+  assign sign = ALUOp == AND || ((ALUOp == RFORMAT) && (Funct == AND_FUNCT));
   
   always @(ALUOp or Funct) begin
     case (ALUOp)
@@ -77,10 +78,12 @@ module ALUControl(alucontrol, jr, ALUOp, Funct);
 endmodule
 
 module ALUControl_testbench();
-  reg [5:0] ALUOp, Funct;
+  reg [1:0] ALUOp;
+  reg [5:0] Funct;
   wire [3:0] alucontrol;
-
-  ALUControl aluControl(alucontrol, ALUOp, Funct);
+  wire jr;
+  
+  ALUControl mALUControl(alucontrol, jr, sign, ALUOp, Funct);
   
   parameter [2:0]
     ADD = 2'b00,

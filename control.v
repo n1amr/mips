@@ -1,39 +1,50 @@
-module Control(opcode, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSrc, RegWrite, Jal);
+module Control(opcode, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSrc, RegWrite, Jal, MemDataSize, MemDataSign);
   input [5:0] opcode;
-  output wire RegWrite, Branch, ALUSrc, MemRead, MemWrite, Jal;
-  output wire [1:0] ALUOp, RegDst, MemtoReg;
+  output wire RegWrite, Branch, ALUSrc, MemRead, MemWrite, Jal, MemDataSign;
+  output wire [1:0] ALUOp, RegDst, MemtoReg, MemDataSize;
   
   parameter [5:0]
     RFORMAT = 6'd0,
     ADDI = 6'd8,
     ANDI = 6'd12,
     LW = 6'd35,
+    LB = 6'b100000,
+    LBU = 6'b100100,
+    LH = 6'b100001,
+    LHU = 6'b100101,
     SW = 6'd43,
+    SB = 6'b101000,
+    SH = 6'b101001,
     BEQ = 6'd5,
     JAL = 6'd3;
 
+  wire LOAD = (opcode == LW || opcode == LB || opcode == LBU || opcode == LH || opcode == LHU);
+  wire STORE = (opcode == SW || opcode == SB || opcode == SH);
+
   assign Jal = (opcode == JAL);
   assign Branch = (opcode == BEQ);
-  assign MemRead = (opcode == LW);
-  assign MemWrite = (opcode == SW);
-  assign ALUSrc = (opcode == ADDI || opcode == ANDI || opcode == LW || opcode == SW);
+  assign MemRead = LOAD;
+  assign MemWrite = STORE;
+  assign ALUSrc = (opcode == ADDI || opcode == ANDI || LOAD || STORE);
   assign RegDst[1] = (opcode == JAL);
   assign RegDst[0] = (opcode == RFORMAT);
   assign MemtoReg[1] = (opcode == JAL);
-  assign MemtoReg[0] = (opcode == LW);
-  assign RegWrite = (opcode == RFORMAT || opcode == ADDI || opcode == ANDI || opcode == LW || opcode == JAL);
+  assign MemtoReg[0] = LOAD;
+  assign RegWrite = (opcode == RFORMAT || opcode == ADDI || opcode == ANDI || LOAD || opcode == JAL);
   assign ALUOp[1] = (opcode == RFORMAT || opcode == ANDI);
   assign ALUOp[0] = (opcode == ANDI || opcode == BEQ);
+  assign MemDataSign = (opcode == LW || opcode == LB || opcode == LH || opcode == SW || opcode == SB || opcode == SH);
+  assign MemDataSize[1] = (opcode == LW || opcode == LH || opcode == LHU || opcode == SW || opcode == SH);
+  assign MemDataSize[0] = (opcode == LW || opcode == LB || opcode == LBU || opcode == SW || opcode == SB);
 
 endmodule
 
 module Control_testbench();
   reg [5:0] opcode;
+  wire RegWrite, Branch, ALUSrc, MemRead, MemWrite, Jal, MemDataSign;
+  wire [1:0] ALUOp, RegDst, MemtoReg, MemDataSize;
 
-  wire Branch, MemRead, MemWrite, ALUSrc, RegWrite;
-  wire [1:0] ALUOp, RegDst, MemtoReg;
-
-  Control control(opcode, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSrc, RegWrite);
+  Control control(opcode, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSrc, RegWrite, Jal, MemDataSize, MemDataSign);
 
   parameter [5:0]
     RFORMAT = 6'd0,
