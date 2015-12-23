@@ -11,7 +11,7 @@ module MIPS;
   wire [4:0] rs, rt, rd, shamt;
   wire [15:0] shift;
   wire [25:0] jump_address;
-  wire Branch, MemRead, MemWrite, ALUSrc, RegWrite, Jal, MemDataSign;
+  wire Branch, MemRead, MemWrite, ALUSrc, RegWrite, Jump, MemDataSign;
   wire [1:0] ALUOp, RegDst, MemtoReg, MemDataSize;
   wire SignExtend;
   wire [4:0] reg_file_write_reg;
@@ -30,7 +30,7 @@ module MIPS;
   wire RegWrite_unless_jr;
   wire not_jr;
   wire [31:0] jump_pc;
-  wire [31:0] jal_mux_pc;
+  wire [31:0] jump_mux_pc;
 
   assign jump_pc = {pc_plus_4[31], pc_plus_4[30], pc_plus_4[29], pc_plus_4[28], jump_address, 2'b00};
   and g1(take_branch, Branch, alu_zero);
@@ -45,7 +45,7 @@ module MIPS;
   
   Decoder decoder_module(instruction, opcode, rs, rt, rd, shamt, funct, shift, jump_address);
   
-  Control control_module(opcode, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSrc, RegWrite, Jal, MemDataSize, MemDataSign);
+  Control control_module(opcode, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSrc, RegWrite, Jump, MemDataSize, MemDataSign);
 
   Mux4_5b reg_dst_mux(reg_file_write_reg, RegDst, rt, rd, 31, 4'bx);
   
@@ -68,9 +68,9 @@ module MIPS;
 
   Mux2_32b branch_mux(branch_mux_pc, take_branch, pc_plus_4, taken_branch_pc);
   
-  Mux2_32b jal_mux(jal_mux_pc, Jal, branch_mux_pc, jump_pc);
+  Mux2_32b jump_mux(jump_mux_pc, Jump, branch_mux_pc, jump_pc);
   
-  Mux2_32b jr_mux(next_pc, jr, jal_mux_pc, reg_file_read_data1);
+  Mux2_32b jr_mux(next_pc, jr, jump_mux_pc, reg_file_read_data1);
 endmodule
 
 module Mux2_32b(out, select, in0, in1);
