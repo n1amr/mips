@@ -1,7 +1,11 @@
 j 3 // jump to main
 FUNCTION: addi $s0, $zero, 125
 END_FUNCTION: jr $ra
-MAIN: jal 1
+MAIN:
+addi $t0, $zero, 3
+addi $t1, $zero, 5
+or $s0, $t0, $t1
+jal 1
 addi $t0, $zero, 0
 addi $t1, $zero, 4
 mul $t1, $t1, $t1
