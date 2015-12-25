@@ -1,4 +1,4 @@
-beq $zero, $zero, MAIN
+j 3 // jump to main
 FUNCTION: addi $s0, $zero, 125
 END_FUNCTION: jr $ra
 MAIN: jal 1
@@ -9,5 +9,6 @@ beq $t2, $zero, END
 lw $s0, 0($t0)
 addi $t0, $t0, 4
 beq $zero, $zero, FOR
-END: sll $zero, $zero, 0
+END:
+sub $t1, $zero, $t0
 EXIT_MAIN:
