@@ -11,7 +11,9 @@ module ALUControl(alucontrol, jr, ALUOp, Funct);
     SUB = 3'b001,
     RFORMAT = 3'b010,
     AND = 3'b011,
-    OR = 3'b100;
+    OR = 3'b100,
+    SLTI = 3'b101,
+    SLTUI = 3'b110;
   
   // Funct of R instructions
   parameter [5:0]
@@ -59,7 +61,6 @@ module ALUControl(alucontrol, jr, ALUOp, Funct);
             tmp <= ALU_ADD;
           end
 
-<<<<<<< HEAD
           SUB_FUNCT: begin
             tmp <= ALU_SUB;
           end
@@ -68,8 +69,6 @@ module ALUControl(alucontrol, jr, ALUOp, Funct);
             tmp <= ALU_MUL;
           end
 
-=======
->>>>>>> master
           AND_FUNCT: begin
             tmp <= ALU_AND;
           end
@@ -110,6 +109,14 @@ module ALUControl(alucontrol, jr, ALUOp, Funct);
 
       OR: begin
         tmp <= ALU_OR;
+      end
+
+      SLTI: begin
+        tmp <= ALU_SLT;
+      end
+
+      SLTUI: begin
+        tmp <= ALU_SLTU;
       end
     endcase
   end

@@ -47,7 +47,7 @@ module ALU (a, b, alu_control, shamt, result, zero);
         tmp <= ({1'b0, a} < {1'b0, b})? 32'b1 : 32'b0;
       end
       OR:
-        tmp <=  a | b;
+        tmp <= a | b;
     endcase
   end
 endmodule
