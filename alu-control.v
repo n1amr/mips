@@ -1,8 +1,8 @@
-module ALUControl(alucontrol, jr, sign, ALUOp, Funct);
+module ALUControl(alucontrol, jr, ALUOp, Funct);
   input [2:0] ALUOp;
   input [5:0] Funct;
   output wire [3:0] alucontrol;
-  output wire jr, sign;
+  output wire jr;
   
   reg [3:0] tmp;
 
@@ -36,7 +36,6 @@ module ALUControl(alucontrol, jr, sign, ALUOp, Funct);
     ALU_MUL = 4'b1111;
 
   assign #10 jr = (ALUOp == RFORMAT) && (Funct == JR_FUNCT);
-  assign #10 sign = !(ALUOp == AND);
   assign #10 alucontrol = tmp;
   
   always @(ALUOp or Funct) begin

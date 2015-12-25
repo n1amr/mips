@@ -47,12 +47,12 @@ module MIPS;
   
   Decoder decoder_module(instruction, opcode, rs, rt, rd, shamt, funct, shift, jump_address);
   
-  Control control_module(opcode, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSrc, RegWrite, Jump, MemDataSize, MemDataSign);
+  Control control_module(opcode, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSrc, RegWrite, Jump, MemDataSize, MemDataSign, SignExtend);
 
   Mux4_5b reg_dst_mux(reg_file_write_reg, RegDst, rt, rd, 31, 4'bx);
   
   RegisterFile register_file_module(rs, rt, reg_file_write_reg, reg_file_write_data, RegWrite_unless_jr, clk, reg_file_read_data1, reg_file_read_data2);
-  ALUControl alu_control_module(alu_control, jr, SignExtend, ALUOp, funct);
+  ALUControl alu_control_module(alu_control, jr, ALUOp, funct);
 
   Sign_extend sign_extend_module(shift, SignExtend,sign_extended_shift);
 
