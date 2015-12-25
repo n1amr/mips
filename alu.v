@@ -26,7 +26,7 @@ module ALU (a, b, alu_control, shamt, result, zero);
       SUB:
         tmp <= a - b;
       SLL:
-        tmp <= (a << shamt);
+        tmp <= (b << shamt);
       AND:
         tmp <= a & b;
       NOR:
