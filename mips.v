@@ -35,6 +35,7 @@ module MIPS;
   wire not_jr;
   wire [31:0] jump_pc;
   wire [31:0] jump_mux_pc;
+  wire [31:0] load_upper_val;
 
   assign jump_pc = {pc_plus_4[31], pc_plus_4[30], pc_plus_4[29], pc_plus_4[28], jump_address, 2'b00};
   and g1(take_beq, Branch, alu_zero);
@@ -66,7 +67,7 @@ module MIPS;
   
   DataMemory data_memory_module(alu_output, reg_file_read_data2, MemRead, MemWrite, MemDataSize, MemDataSign, clk, data_mem_output);
   
-  Mux4_32b mem_to_reg_mux(reg_file_write_data, MemtoReg, alu_output, data_mem_output, pc_plus_4, 32'bx);
+  Mux4_32b mem_to_reg_mux(reg_file_write_data, MemtoReg, alu_output, data_mem_output, pc_plus_4, load_upper_val);
   
   ShiftLeft2 shift_left_2_module(sign_extended_shift, branch_offset);
   
@@ -77,6 +78,8 @@ module MIPS;
   Mux2_32b jump_mux(jump_mux_pc, Jump, branch_mux_pc, jump_pc);
   
   Mux2_32b jr_mux(next_pc, jr, jump_mux_pc, reg_file_read_data1);
+
+  LoadUpper mLoadUpper(load_upper_val, shift);
 endmodule
 
 module Mux2_32b(out, select, in0, in1);
@@ -101,4 +104,11 @@ module Mux4_5b(out, select, in0, in1, in2, in3);
   output wire [4:0] out;
 
   assign #10 out = (select == 2'd0)? in0 : (select == 2'd1)? in1 : (select == 2'd2)? in2 : (select == 2'd3)? in3 : 4'bx;
+endmodule
+
+module LoadUpper(out, in);
+  input [15:0] in;
+  output wire [31:0] out;
+
+  assign out = {in, {16{1'b0}} };
 endmodule

@@ -9,6 +9,7 @@ module Control(opcode, RegDst, Branch, Bne, MemRead, MemtoReg, ALUOp, MemWrite, 
     ADDI = 6'd8,
     ANDI = 6'd12,
     ORI = 6'b001101,
+    LUI = 6'b001111,
     LW = 6'd35,
     LB = 6'b100000,
     LBU = 6'b100100,
@@ -33,9 +34,9 @@ module Control(opcode, RegDst, Branch, Bne, MemRead, MemtoReg, ALUOp, MemWrite, 
   assign #10 ALUSrc = (opcode == ADDI || opcode == ANDI || opcode == ORI || LOAD || STORE);
   assign #10 RegDst[1] = (opcode == JAL);
   assign #10 RegDst[0] = (opcode == RFORMAT);
-  assign #10 MemtoReg[1] = (opcode == JAL);
-  assign #10 MemtoReg[0] = LOAD;
-  assign #10 RegWrite = (opcode == RFORMAT || opcode == ADDI || opcode == ANDI || opcode == ORI || LOAD || opcode == JAL);
+  assign #10 MemtoReg[1] = (opcode == JAL || opcode == LUI);
+  assign #10 MemtoReg[0] = LOAD || (opcode == LUI);
+  assign #10 RegWrite = (opcode == RFORMAT || opcode == ADDI || opcode == ANDI || opcode == ORI || LOAD || opcode == JAL || opcode == LUI);
   assign #10 ALUOp[2] = (opcode == ORI);
   assign #10 ALUOp[1] = (opcode == RFORMAT || opcode == ANDI);
   assign #10 ALUOp[0] = (opcode == ANDI || opcode == BEQ);

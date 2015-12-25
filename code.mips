@@ -1,8 +1,1 @@
-addi $t0, $zero, 1
-L1: beq $zero, $zero, L7
-L2: beq $t0, $zero, L6
-L3: bne $zero, $zero, L6
-L4:
-L5:
-L6:
-L7: bne $t0, $zero, L2
+lui $t0, 4095
