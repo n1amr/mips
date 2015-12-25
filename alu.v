@@ -6,6 +6,7 @@ module ALU (a, b, alu_control, shamt, result, zero);
   output wire zero;
   
   reg [31:0] tmp;
+  reg [31:0] helper;
 
   assign #100 result = tmp;
   assign #10 zero = (result == 32'b0)? 1 : 0;
@@ -31,8 +32,10 @@ module ALU (a, b, alu_control, shamt, result, zero);
         tmp <= a & b;
       NOR:
         tmp <= ~(a | b);
-      SLT:
-        tmp <= (a < b)? 32'b1 : 32'b0;
+      SLT: begin
+        helper = a - b;
+        tmp <= (helper[31] == 1'b1)? 32'b1 : 32'b0;
+      end
       OR:
         tmp <=  a | b;
     endcase
