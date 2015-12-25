@@ -17,7 +17,8 @@ module ALU (a, b, alu_control, shamt, result, zero);
     AND = 4'b0000,
     NOR = 4'b1100,
     SLT = 4'b0111,
-    OR = 4'b0001;
+    OR = 4'b0001,
+    MUL = 4'b1111;
 
   always @ (a, b, alu_control, shamt) begin
     case(alu_control)
@@ -25,6 +26,8 @@ module ALU (a, b, alu_control, shamt, result, zero);
         tmp <= a + b;
       SUB:
         tmp <= a - b;
+      MUL:
+        tmp <= a * b;
       SLL:
         tmp <= (a << shamt);
       AND:

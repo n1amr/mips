@@ -3,7 +3,8 @@ FUNCTION: addi $s0, $zero, 125
 END_FUNCTION: jr $ra
 MAIN: jal 1
 addi $t0, $zero, 0
-addi $t1, $zero, 16
+addi $t1, $zero, 4
+mul $t1, $t1, $t1
 FOR: slt $t2, $t0, $t1
 beq $t2, $zero, END
 lw $s0, 0($t0)

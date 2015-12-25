@@ -16,6 +16,7 @@ module ALUControl(alucontrol, jr, sign, ALUOp, Funct);
   parameter [5:0]
     ADD_FUNCT = 6'd32,
     SUB_FUNCT = 6'b100010,
+    MUL_FUNCT = 6'b011000,
     AND_FUNCT = 6'd36,
     NOR_FUNCT = 6'd39,
     SLT_FUNCT = 6'd42,
@@ -30,7 +31,8 @@ module ALUControl(alucontrol, jr, sign, ALUOp, Funct);
     ALU_AND = 4'b0000,
     ALU_NOR = 4'b1100,
     ALU_SLT = 4'b0111,
-    ALU_OR = 4'b0001;
+    ALU_OR = 4'b0111,
+    ALU_MUL = 4'b1111;
 
   assign #10 jr = (ALUOp == RFORMAT) && (Funct == JR_FUNCT);
   assign #10 sign = !(ALUOp == AND);
@@ -54,6 +56,10 @@ module ALUControl(alucontrol, jr, sign, ALUOp, Funct);
 
           SUB_FUNCT: begin
             tmp <= ALU_SUB;
+          end
+
+          MUL_FUNCT: begin
+            tmp <= ALU_MUL;
           end
 
           AND_FUNCT: begin
