@@ -32,7 +32,7 @@ module ALUControl(alucontrol, jr, sign, ALUOp, Funct);
     ALU_AND = 4'b0000,
     ALU_NOR = 4'b1100,
     ALU_SLT = 4'b0111,
-    ALU_OR = 4'b0111,
+    ALU_OR = 4'b0001,
     ALU_MUL = 4'b1111;
 
   assign #10 jr = (ALUOp == RFORMAT) && (Funct == JR_FUNCT);
