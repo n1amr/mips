@@ -10,7 +10,8 @@ module ALUControl(alucontrol, jr, ALUOp, Funct);
     ADD = 3'b000,
     SUB = 3'b001,
     RFORMAT = 3'b010,
-    AND = 3'b011;
+    AND = 3'b011,
+    OR = 3'b100;
   
   // Funct of R instructions
   parameter [5:0]
@@ -90,6 +91,10 @@ module ALUControl(alucontrol, jr, ALUOp, Funct);
 
       AND: begin
         tmp <= ALU_AND;
+      end
+
+      OR: begin
+        tmp <= ALU_OR;
       end
     endcase
   end

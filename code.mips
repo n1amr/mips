@@ -1,19 +1,2 @@
-j 3 // jump to main
-FUNCTION: addi $s0, $zero, 125
-END_FUNCTION: jr $ra
-MAIN:
 addi $t0, $zero, 3
-addi $t1, $zero, 5
-or $s0, $t0, $t1
-jal 1
-addi $t0, $zero, 0
-addi $t1, $zero, 4
-mul $t1, $t1, $t1
-FOR: slt $t2, $t0, $t1
-beq $t2, $zero, END
-lw $s0, 0($t0)
-addi $t0, $t0, 4
-beq $zero, $zero, FOR
-END:
-sub $t1, $zero, $t0
-EXIT_MAIN:
+ori $s0, $t0, 5

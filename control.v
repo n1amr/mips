@@ -8,6 +8,7 @@ module Control(opcode, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSr
     RFORMAT = 6'd0,
     ADDI = 6'd8,
     ANDI = 6'd12,
+    ORI = 6'b001101,
     LW = 6'd35,
     LB = 6'b100000,
     LBU = 6'b100100,
@@ -27,20 +28,19 @@ module Control(opcode, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSr
   assign #10 Branch = (opcode == BEQ);
   assign #10 MemRead = LOAD;
   assign #10 MemWrite = STORE;
-  assign #10 ALUSrc = (opcode == ADDI || opcode == ANDI || LOAD || STORE);
+  assign #10 ALUSrc = (opcode == ADDI || opcode == ANDI || opcode == ORI || LOAD || STORE);
   assign #10 RegDst[1] = (opcode == JAL);
   assign #10 RegDst[0] = (opcode == RFORMAT);
   assign #10 MemtoReg[1] = (opcode == JAL);
   assign #10 MemtoReg[0] = LOAD;
-  assign #10 RegWrite = (opcode == RFORMAT || opcode == ADDI || opcode == ANDI || LOAD || opcode == JAL);
-  assign #10 ALUOp[2] = (1'b0);
+  assign #10 RegWrite = (opcode == RFORMAT || opcode == ADDI || opcode == ANDI || opcode == ORI || LOAD || opcode == JAL);
+  assign #10 ALUOp[2] = (opcode == ORI);
   assign #10 ALUOp[1] = (opcode == RFORMAT || opcode == ANDI);
   assign #10 ALUOp[0] = (opcode == ANDI || opcode == BEQ);
   assign #10 MemDataSign = (opcode == LW || opcode == LB || opcode == LH || opcode == SW || opcode == SB || opcode == SH);
   assign #10 MemDataSize[1] = (opcode == LW || opcode == LH || opcode == LHU || opcode == SW || opcode == SH);
   assign #10 MemDataSize[0] = (opcode == LW || opcode == LB || opcode == LBU || opcode == SW || opcode == SB);
-  assign #10 SignExtend = !(opcode == ANDI);
-
+  assign #10 SignExtend = !(opcode == ANDI || opcode == ORI);
 
 endmodule
 
