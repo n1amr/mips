@@ -1,6 +1,6 @@
-module Control(opcode, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSrc, RegWrite, Jump, MemDataSize, MemDataSign, SignExtend);
+module Control(opcode, RegDst, Branch, Bne, MemRead, MemtoReg, ALUOp, MemWrite, ALUSrc, RegWrite, Jump, MemDataSize, MemDataSign, SignExtend);
   input [5:0] opcode;
-  output wire RegWrite, Branch, ALUSrc, MemRead, MemWrite, Jump, MemDataSign, SignExtend;
+  output wire RegWrite, Branch, Bne, ALUSrc, MemRead, MemWrite, Jump, MemDataSign, SignExtend;
   output wire [1:0] RegDst, MemtoReg, MemDataSize;
   output wire [2:0] ALUOp;
   
@@ -18,6 +18,7 @@ module Control(opcode, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSr
     SB = 6'b101000,
     SH = 6'b101001,
     BEQ = 6'd5,
+    BNE = 6'b000100,
     J = 6'b000010,
     JAL = 6'd3;
 
@@ -26,6 +27,7 @@ module Control(opcode, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSr
 
   assign #10 Jump = (opcode == JAL || opcode == J);
   assign #10 Branch = (opcode == BEQ);
+  assign #10 Bne = (opcode == BNE);
   assign #10 MemRead = LOAD;
   assign #10 MemWrite = STORE;
   assign #10 ALUSrc = (opcode == ADDI || opcode == ANDI || opcode == ORI || LOAD || STORE);
@@ -46,11 +48,11 @@ endmodule
 
 module Control_testbench();
   reg [5:0] opcode;
-  wire RegWrite, Branch, ALUSrc, MemRead, MemWrite, Jump, MemDataSign, SignExtend;
+  wire RegWrite, Branch, Bne, ALUSrc, MemRead, MemWrite, Jump, MemDataSign, SignExtend;
   wire [1:0] RegDst, MemtoReg, MemDataSize;
   wire [2:0] ALUOp;
 
-  Control control(opcode, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSrc, RegWrite, Jump, MemDataSize, MemDataSign, SignExtend);
+  Control control(opcode, RegDst, Branch, Bne, MemRead, MemtoReg, ALUOp, MemWrite, ALUSrc, RegWrite, Jump, MemDataSize, MemDataSign, SignExtend);
 
   parameter [5:0]
     RFORMAT = 6'd0,

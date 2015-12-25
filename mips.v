@@ -12,7 +12,7 @@ module MIPS;
   wire [4:0] rs, rt, rd, shamt;
   wire [15:0] shift;
   wire [25:0] jump_address;
-  wire Branch, MemRead, MemWrite, ALUSrc, RegWrite, Jump, MemDataSign;
+  wire Branch, Bne, MemRead, MemWrite, ALUSrc, RegWrite, Jump, MemDataSign;
   wire [1:0] RegDst, MemtoReg, MemDataSize;
   wire [2:0] ALUOp;
   wire SignExtend;
@@ -28,6 +28,8 @@ module MIPS;
   wire [31:0] branch_offset;
   wire [31:0] taken_branch_pc;
   wire [31:0] branch_mux_pc;
+  wire take_beq;
+  wire take_bne;
   wire take_branch;
   wire RegWrite_unless_jr;
   wire not_jr;
@@ -35,7 +37,9 @@ module MIPS;
   wire [31:0] jump_mux_pc;
 
   assign jump_pc = {pc_plus_4[31], pc_plus_4[30], pc_plus_4[29], pc_plus_4[28], jump_address, 2'b00};
-  and g1(take_branch, Branch, alu_zero);
+  and g1(take_beq, Branch, alu_zero);
+  and g4(take_bne, Bne, !alu_zero);
+  or g5(take_branch, take_beq, take_bne);
   not g2(not_jr, jr);
   and g3(RegWrite_unless_jr, RegWrite, not_jr);
 
@@ -47,7 +51,7 @@ module MIPS;
   
   Decoder decoder_module(instruction, opcode, rs, rt, rd, shamt, funct, shift, jump_address);
   
-  Control control_module(opcode, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSrc, RegWrite, Jump, MemDataSize, MemDataSign, SignExtend);
+  Control control_module(opcode, RegDst, Branch, Bne, MemRead, MemtoReg, ALUOp, MemWrite, ALUSrc, RegWrite, Jump, MemDataSize, MemDataSign, SignExtend);
 
   Mux4_5b reg_dst_mux(reg_file_write_reg, RegDst, rt, rd, 31, 4'bx);
   
