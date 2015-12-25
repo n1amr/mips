@@ -6,6 +6,7 @@ module ALU (a, b, alu_control, shamt, result, zero);
   output wire zero;
   
   reg [31:0] tmp;
+  reg [31:0] helper;
 
   assign #100 result = tmp;
   assign #10 zero = (result == 32'b0)? 1 : 0;
@@ -18,6 +19,7 @@ module ALU (a, b, alu_control, shamt, result, zero);
     AND = 4'b0000,
     NOR = 4'b1100,
     SLT = 4'b0111,
+    SLTU = 4'b0100,
     OR = 4'b0001,
     MUL = 4'b1111;
 
@@ -37,8 +39,13 @@ module ALU (a, b, alu_control, shamt, result, zero);
         tmp <= a & b;
       NOR:
         tmp <= ~(a | b);
-      SLT:
-        tmp <= (a < b)? 32'b1 : 32'b0;
+      SLT: begin
+        helper = a - b;
+        tmp <= (helper[31] == 1'b1)? 32'b1 : 32'b0;
+      end
+      SLTU: begin
+        tmp <= ({1'b0, a} < {1'b0, b})? 32'b1 : 32'b0;
+      end
       OR:
         tmp <=  a | b;
     endcase
@@ -56,10 +63,13 @@ module ALU_testbench();
     ADD = 4'b0010,
     SUB = 4'b0110,
     SLL = 4'b0011,
+    SRL = 4'b1011,
     AND = 4'b0000,
     NOR = 4'b1100,
     SLT = 4'b0111,
-    OR = 4'b0001;
+    SLTU = 4'b0100,
+    OR = 4'b0001,
+    MUL = 4'b1111;
 
   ALU alu(a, b, alu_control, shamt, result, zero);
 
