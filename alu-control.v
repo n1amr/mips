@@ -1,5 +1,5 @@
 module ALUControl(alucontrol, jr, sign, ALUOp, Funct);
-  input [1:0] ALUOp;
+  input [2:0] ALUOp;
   input [5:0] Funct;
   output wire [3:0] alucontrol;
   output wire jr, sign;
@@ -7,10 +7,10 @@ module ALUControl(alucontrol, jr, sign, ALUOp, Funct);
   reg [3:0] tmp;
 
   parameter [2:0]
-    ADD = 2'b00,
-    SUB = 2'b01,
-    RFORMAT = 2'b10,
-    AND = 2'b11;
+    ADD = 3'b000,
+    SUB = 3'b001,
+    RFORMAT = 3'b010,
+    AND = 3'b011;
   
   // Funct of R instructions
   parameter [5:0]
@@ -97,7 +97,7 @@ module ALUControl(alucontrol, jr, sign, ALUOp, Funct);
 endmodule
 
 module ALUControl_testbench();
-  reg [1:0] ALUOp;
+  reg [2:0] ALUOp;
   reg [5:0] Funct;
   wire [3:0] alucontrol;
   wire jr;
@@ -105,10 +105,10 @@ module ALUControl_testbench();
   ALUControl mALUControl(alucontrol, jr, sign, ALUOp, Funct);
   
   parameter [2:0]
-    ADD = 2'b00,
-    SUB = 2'b01,
-    RFORMAT = 2'b10,
-    AND = 2'b11;
+    ADD = 3'b000,
+    SUB = 3'b001,
+    RFORMAT = 3'b010,
+    AND = 3'b011;
   
   parameter [5:0]
     ADD_FUNCT = 6'd32,
