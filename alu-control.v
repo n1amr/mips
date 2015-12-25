@@ -59,6 +59,7 @@ module ALUControl(alucontrol, jr, ALUOp, Funct);
             tmp <= ALU_ADD;
           end
 
+<<<<<<< HEAD
           SUB_FUNCT: begin
             tmp <= ALU_SUB;
           end
@@ -67,6 +68,8 @@ module ALUControl(alucontrol, jr, ALUOp, Funct);
             tmp <= ALU_MUL;
           end
 
+=======
+>>>>>>> master
           AND_FUNCT: begin
             tmp <= ALU_AND;
           end

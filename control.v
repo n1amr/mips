@@ -26,7 +26,7 @@ module Control(opcode, RegDst, Branch, Bne, MemRead, MemtoReg, ALUOp, MemWrite, 
   wire LOAD = (opcode == LW || opcode == LB || opcode == LBU || opcode == LH || opcode == LHU);
   wire STORE = (opcode == SW || opcode == SB || opcode == SH);
 
-  assign #10 Jump = (opcode == JAL || opcode == J);
+  assign #10 Jump = (opcode == JAL);
   assign #10 Branch = (opcode == BEQ);
   assign #10 Bne = (opcode == BNE);
   assign #10 MemRead = LOAD;
