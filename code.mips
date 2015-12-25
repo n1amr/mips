@@ -1,4 +1,4 @@
-j 3 // jump to main
+beq $zero, $zero, MAIN
 FUNCTION: addi $s0, $zero, 125
 END_FUNCTION: jr $ra
 MAIN: jal 1
