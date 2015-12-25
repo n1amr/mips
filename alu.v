@@ -14,6 +14,7 @@ module ALU (a, b, alu_control, shamt, result, zero);
     ADD = 4'b0010,
     SUB = 4'b0110,
     SLL = 4'b0011,
+    SRL = 4'b1011,
     AND = 4'b0000,
     NOR = 4'b1100,
     SLT = 4'b0111,
@@ -29,7 +30,9 @@ module ALU (a, b, alu_control, shamt, result, zero);
       MUL:
         tmp <= a * b;
       SLL:
-        tmp <= (a << shamt);
+        tmp <= (b << shamt);
+      SRL:
+        tmp <= (b >> shamt);
       AND:
         tmp <= a & b;
       NOR:

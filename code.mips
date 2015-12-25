@@ -1,2 +1,3 @@
-addi $t0, $zero, 3
-ori $s0, $t0, 5
+addi $t0, $zero, 16
+sll $s0, $t0, 3
+srl $s0, $t0, 3

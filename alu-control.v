@@ -23,6 +23,7 @@ module ALUControl(alucontrol, jr, ALUOp, Funct);
     NOR_FUNCT = 6'd39,
     SLT_FUNCT = 6'd42,
     SLL_FUNCT = 6'd0,
+    SRL_FUNCT = 6'b000010,
     JR_FUNCT = 6'd8;
   
   // alu control signals
@@ -30,6 +31,7 @@ module ALUControl(alucontrol, jr, ALUOp, Funct);
     ALU_ADD = 4'b0010,
     ALU_SUB = 4'b0110,
     ALU_SLL = 4'b0011,
+    ALU_SRL = 4'b1011,
     ALU_AND = 4'b0000,
     ALU_NOR = 4'b1100,
     ALU_SLT = 4'b0111,
@@ -81,6 +83,10 @@ module ALUControl(alucontrol, jr, ALUOp, Funct);
 
           SLL_FUNCT: begin
             tmp <= ALU_SLL;
+          end
+
+          SRL_FUNCT: begin
+            tmp <= ALU_SRL;
           end
 
           JR_FUNCT: begin
