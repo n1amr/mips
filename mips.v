@@ -2,7 +2,8 @@ module MIPS;
   reg clk;
   initial begin
     clk <= 0;
-    forever #500 clk <= ~clk;
+    #350
+    forever #350 clk <= ~clk;
   end
 
   wire [31:0] pc, next_pc, pc_plus_4;
@@ -78,7 +79,7 @@ module Mux2_32b(out, select, in0, in1);
   input [31:0] in0, in1;
   output wire [31:0] out;
 
-  assign out = select == 0? in0 : in1;
+  assign #10 out = select == 0? in0 : in1;
 endmodule
 
 module Mux4_32b(out, select, in0, in1, in2, in3);
@@ -86,7 +87,7 @@ module Mux4_32b(out, select, in0, in1, in2, in3);
   input [31:0] in0, in1, in2, in3;
   output wire [31:0] out;
 
-  assign out = (select == 2'd0)? in0 : (select == 2'd1)? in1 : (select == 2'd2)? in2 : (select == 2'd3)? in3 : 32'bx;
+  assign #10 out = (select == 2'd0)? in0 : (select == 2'd1)? in1 : (select == 2'd2)? in2 : (select == 2'd3)? in3 : 32'bx;
 endmodule
 
 module Mux4_5b(out, select, in0, in1, in2, in3);
@@ -94,5 +95,5 @@ module Mux4_5b(out, select, in0, in1, in2, in3);
   input [4:0] in0, in1, in2, in3;
   output wire [4:0] out;
 
-  assign out = (select == 2'd0)? in0 : (select == 2'd1)? in1 : (select == 2'd2)? in2 : (select == 2'd3)? in3 : 4'bx;
+  assign #10 out = (select == 2'd0)? in0 : (select == 2'd1)? in1 : (select == 2'd2)? in2 : (select == 2'd3)? in3 : 4'bx;
 endmodule

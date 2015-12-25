@@ -1,9 +1,12 @@
 module InstructionMemory(read_address, instruction);
   input [31:0] read_address;
-  output [31:0] instruction;
+  output reg [31:0] instruction;
 
   reg [31:0] mem [0:255];
-  assign instruction = mem[read_address >> 2];
+
+  always @(read_address) begin
+    instruction <= #200 mem[read_address >> 2];
+  end
 
   // Initialize memory
   initial begin

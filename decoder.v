@@ -9,14 +9,14 @@ module Decoder(instruction, opcode, rs, rt, rd, shamt, funct, shift, jump_addres
   output [15:0] shift;
   output [25:0] jump_address;
 
-  assign opcode = instruction[31:26];
-  assign rs = instruction[25:21];
-  assign rt = instruction[20:16];
-  assign rd = instruction[15:11];
-  assign shamt = instruction[10:6];
-  assign funct = instruction[5:0];
-  assign shift = instruction[15:0];
-  assign jump_address = instruction[25:0];
+  assign #10 opcode = instruction[31:26];
+  assign #10 rs = instruction[25:21];
+  assign #10 rt = instruction[20:16];
+  assign #10 rd = instruction[15:11];
+  assign #10 shamt = instruction[10:6];
+  assign #10 funct = instruction[5:0];
+  assign #10 shift = instruction[15:0];
+  assign #10 jump_address = instruction[25:0];
 endmodule
 
 module Decoder_testbench();

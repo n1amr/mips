@@ -4,7 +4,7 @@ module PC(in, clk, out);
   output reg [31:0] out;
 
   always @ (posedge clk) begin
-    #20 out = in;
+    out <= #10 in;
   end
 
   initial begin

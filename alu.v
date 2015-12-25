@@ -2,10 +2,13 @@ module ALU (a, b, alu_control, shamt, result, zero);
   input [31:0] a, b;
   input [3:0] alu_control;
   input [4:0] shamt;
-  output reg [31:0] result;
+  output wire [31:0] result;
   output wire zero;
+  
+  reg [31:0] tmp;
 
-  assign zero = (result == 32'b0)? 1 : 0;
+  assign #100 result = tmp;
+  assign #10 zero = (result == 32'b0)? 1 : 0;
   
   parameter [3:0]
     ADD = 4'b0010,
@@ -19,19 +22,19 @@ module ALU (a, b, alu_control, shamt, result, zero);
   always @ (a, b, alu_control, shamt) begin
     case(alu_control)
       ADD:
-        result <= a + b;
+        tmp <= a + b;
       SUB:
-        result <= a - b;
+        tmp <= a - b;
       SLL:
-        result <= (a << shamt);
+        tmp <= (a << shamt);
       AND:
-         result <= a & b;
+        tmp <= a & b;
       NOR:
-        result <= ~(a | b);
+        tmp <= ~(a | b);
       SLT:
-        result <= (a < b)? 32'b1 : 32'b0;
+        tmp <= (a < b)? 32'b1 : 32'b0;
       OR:
-         result <=  a | b;
+        tmp <=  a | b;
     endcase
   end
 endmodule

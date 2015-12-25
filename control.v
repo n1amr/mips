@@ -21,21 +21,21 @@ module Control(opcode, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSr
   wire LOAD = (opcode == LW || opcode == LB || opcode == LBU || opcode == LH || opcode == LHU);
   wire STORE = (opcode == SW || opcode == SB || opcode == SH);
 
-  assign Jump = (opcode == JAL);
-  assign Branch = (opcode == BEQ);
-  assign MemRead = LOAD;
-  assign MemWrite = STORE;
-  assign ALUSrc = (opcode == ADDI || opcode == ANDI || LOAD || STORE);
-  assign RegDst[1] = (opcode == JAL);
-  assign RegDst[0] = (opcode == RFORMAT);
-  assign MemtoReg[1] = (opcode == JAL);
-  assign MemtoReg[0] = LOAD;
-  assign RegWrite = (opcode == RFORMAT || opcode == ADDI || opcode == ANDI || LOAD || opcode == JAL);
-  assign ALUOp[1] = (opcode == RFORMAT || opcode == ANDI);
-  assign ALUOp[0] = (opcode == ANDI || opcode == BEQ);
-  assign MemDataSign = (opcode == LW || opcode == LB || opcode == LH || opcode == SW || opcode == SB || opcode == SH);
-  assign MemDataSize[1] = (opcode == LW || opcode == LH || opcode == LHU || opcode == SW || opcode == SH);
-  assign MemDataSize[0] = (opcode == LW || opcode == LB || opcode == LBU || opcode == SW || opcode == SB);
+  assign #10 Jump = (opcode == JAL);
+  assign #10 Branch = (opcode == BEQ);
+  assign #10 MemRead = LOAD;
+  assign #10 MemWrite = STORE;
+  assign #10 ALUSrc = (opcode == ADDI || opcode == ANDI || LOAD || STORE);
+  assign #10 RegDst[1] = (opcode == JAL);
+  assign #10 RegDst[0] = (opcode == RFORMAT);
+  assign #10 MemtoReg[1] = (opcode == JAL);
+  assign #10 MemtoReg[0] = LOAD;
+  assign #10 RegWrite = (opcode == RFORMAT || opcode == ADDI || opcode == ANDI || LOAD || opcode == JAL);
+  assign #10 ALUOp[1] = (opcode == RFORMAT || opcode == ANDI);
+  assign #10 ALUOp[0] = (opcode == ANDI || opcode == BEQ);
+  assign #10 MemDataSign = (opcode == LW || opcode == LB || opcode == LH || opcode == SW || opcode == SB || opcode == SH);
+  assign #10 MemDataSize[1] = (opcode == LW || opcode == LH || opcode == LHU || opcode == SW || opcode == SH);
+  assign #10 MemDataSize[0] = (opcode == LW || opcode == LB || opcode == LBU || opcode == SW || opcode == SB);
 
 endmodule
 

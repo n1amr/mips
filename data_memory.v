@@ -17,7 +17,7 @@ module DataMemory(address, write_data, MemRead, MemWrite, MemDataSize, MemDataSi
 
   assign signed_data = (MemDataSize == WORD)? {mem[address], mem[address + 1], mem[address + 2], mem[address + 3]} : (MemDataSize == HALFWORD)? {{16{mem[address][7]}}, mem[address], mem[address + 1]} : (MemDataSize == BYTE)? {{24{mem[address][7]}},mem[address]} : 32'bx;
   assign unsigned_data = (MemDataSize == WORD)? {mem[address], mem[address + 1], mem[address + 2], mem[address + 3]} : (MemDataSize == HALFWORD)? {{16{1'b0}}, mem[address], mem[address + 1]} : (MemDataSize == BYTE)? {{24{1'b0}},mem[address]} : 32'bx ;
-  assign read_data = (MemDataSign == 1'b1)? signed_data : unsigned_data;
+  assign #200 read_data = (MemRead)? ((MemDataSign == 1'b1)? signed_data : unsigned_data) : 32'bz;
   
 
   always @ (negedge clk) begin

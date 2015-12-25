@@ -1,9 +1,11 @@
 module ALUControl(alucontrol, jr, sign, ALUOp, Funct);
   input [1:0] ALUOp;
   input [5:0] Funct;
-  output reg [3:0] alucontrol;
+  output wire [3:0] alucontrol;
   output wire jr, sign;
   
+  reg [3:0] tmp;
+
   parameter [2:0]
     ADD = 2'b00,
     SUB = 2'b01,
@@ -29,52 +31,53 @@ module ALUControl(alucontrol, jr, sign, ALUOp, Funct);
     ALU_SLT = 4'b0111,
     ALU_OR = 4'b0001;
 
-  assign jr = (ALUOp == RFORMAT) && (Funct == JR_FUNCT);
-  assign sign = !(ALUOp == AND);
+  assign #10 jr = (ALUOp == RFORMAT) && (Funct == JR_FUNCT);
+  assign #10 sign = !(ALUOp == AND);
+  assign #10 alucontrol = tmp;
   
   always @(ALUOp or Funct) begin
     case (ALUOp)
       ADD: begin
-        alucontrol <= ALU_ADD;
+        tmp <= ALU_ADD;
       end
 
       SUB: begin
-        alucontrol <= ALU_SUB;
+        tmp <= ALU_SUB;
       end
 
       RFORMAT: begin
         case(Funct)
           ADD_FUNCT: begin
-             alucontrol <= ALU_ADD;
+            tmp <= ALU_ADD;
           end
 
           AND_FUNCT: begin
-            alucontrol <= ALU_AND;
+            tmp <= ALU_AND;
           end
 
           NOR_FUNCT: begin
-            alucontrol <= ALU_NOR;
+            tmp <= ALU_NOR;
           end
 
           SLT_FUNCT: begin
-            alucontrol <= ALU_SLT;
+            tmp <= ALU_SLT;
           end
 
           SLL_FUNCT: begin
-            alucontrol <= ALU_SLL;
+            tmp <= ALU_SLL;
           end
 
           JR_FUNCT: begin
-            alucontrol <= 2'bxx;
+            tmp <= 2'bxx;
           end
         endcase
       end
 
       AND: begin
-        alucontrol <= ALU_AND;
+        tmp <= ALU_AND;
       end
-      endcase
-    end
+    endcase
+  end
 endmodule
 
 module ALUControl_testbench();
