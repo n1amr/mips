@@ -15,7 +15,6 @@ module ALUControl(alucontrol, jr, sign, ALUOp, Funct);
   // Funct of R instructions
   parameter [5:0]
     ADD_FUNCT = 6'd32,
-    SUB_FUNCT = 6'b100010,
     AND_FUNCT = 6'd36,
     NOR_FUNCT = 6'd39,
     SLT_FUNCT = 6'd42,
@@ -50,10 +49,6 @@ module ALUControl(alucontrol, jr, sign, ALUOp, Funct);
         case(Funct)
           ADD_FUNCT: begin
             tmp <= ALU_ADD;
-          end
-
-          SUB_FUNCT: begin
-            tmp <= ALU_SUB;
           end
 
           AND_FUNCT: begin
