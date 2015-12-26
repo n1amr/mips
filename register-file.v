@@ -15,12 +15,8 @@ module RegisterFile(read_reg1, read_reg2, write_reg, write_data, RegWrite, clk, 
     end
   end
 
-  // Initialization for simulation (TODO remove later)
-  integer i;
   initial begin
-    for(i = 0; i < 32; i = i + 1) begin
-      registers[i] = i;
-    end    
+    registers[0] = 32'b0;
   end
 endmodule
 
