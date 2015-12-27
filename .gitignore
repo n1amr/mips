@@ -4,3 +4,4 @@
 !*.mips
 !*.mem
 !*.vhd
+!vhdl/*

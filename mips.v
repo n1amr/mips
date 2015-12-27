@@ -12,9 +12,8 @@ module MIPS;
   wire [4:0] rs, rt, rd, shamt;
   wire [15:0] shift;
   wire [25:0] jump_address;
-  wire Branch, MemRead, MemWrite, ALUSrc, RegWrite, Jump;
+  wire Branch, MemRead, MemWrite, ALUSrc, RegWrite, Jump, SignExtend;
   wire [1:0] ALUOp, RegDst, MemtoReg;
-  wire SignExtend;
   wire [4:0] reg_file_write_reg;
   wire [31:0] reg_file_write_data;
   wire [31:0] reg_file_read_data1, reg_file_read_data2;
@@ -46,12 +45,12 @@ module MIPS;
   
   Decoder decoder_module(instruction, opcode, rs, rt, rd, shamt, funct, shift, jump_address);
   
-  Control control_module(opcode, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSrc, RegWrite, Jump);
+  Control control_module(opcode, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSrc, RegWrite, Jump, SignExtend);
 
   Mux4_5b reg_dst_mux(reg_file_write_reg, RegDst, rt, rd, 31, 4'bx);
   
   RegisterFile register_file_module(rs, rt, reg_file_write_reg, reg_file_write_data, RegWrite_unless_jr, clk, reg_file_read_data1, reg_file_read_data2);
-  ALUControl alu_control_module(alu_control, jr, SignExtend, ALUOp, funct);
+  ALUControl alu_control_module(alu_control, jr, ALUOp, funct);
 
   Sign_extend sign_extend_module(shift, SignExtend,sign_extended_shift);
 

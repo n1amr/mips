@@ -1,6 +1,6 @@
-module Control(opcode, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSrc, RegWrite, Jump);
+module Control(opcode, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSrc, RegWrite, Jump, SignExtend);
   input [5:0] opcode;
-  output wire RegWrite, Branch, ALUSrc, MemRead, MemWrite, Jump;
+  output wire RegWrite, Branch, ALUSrc, MemRead, MemWrite, Jump, SignExtend;
   output wire [1:0] ALUOp, RegDst, MemtoReg;
   
   parameter [5:0]
@@ -28,6 +28,7 @@ module Control(opcode, RegDst, Branch, MemRead, MemtoReg, ALUOp, MemWrite, ALUSr
   assign #10 ALUOp[1] = (opcode == RFORMAT || opcode == ANDI);
   assign #10 ALUOp[0] = (opcode == ANDI || opcode == BEQ);
 
+  assign #10 SignExtend = !(opcode == ANDI);
 endmodule
 
 module Control_testbench();
