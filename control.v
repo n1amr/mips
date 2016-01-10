@@ -28,7 +28,7 @@ module Control(opcode, RegDst, Branch, Bne, MemRead, MemtoReg, ALUOp, MemWrite, 
   wire LOAD = (opcode == LW || opcode == LB || opcode == LBU || opcode == LH || opcode == LHU);
   wire STORE = (opcode == SW || opcode == SB || opcode == SH);
 
-  assign #10 Jump = (opcode == JAL);
+  assign #10 Jump = (opcode == JAL || opcode == J);
   assign #10 Branch = (opcode == BEQ);
   assign #10 Bne = (opcode == BNE);
   assign #10 MemRead = LOAD;
@@ -41,11 +41,11 @@ module Control(opcode, RegDst, Branch, Bne, MemRead, MemtoReg, ALUOp, MemWrite, 
   assign #10 RegWrite = (opcode == RFORMAT || opcode == ADDI || opcode == ANDI || opcode == ORI || LOAD || opcode == JAL || opcode == LUI || opcode == SLTI || opcode == SLTUI);
   assign #10 ALUOp[2] = (opcode == ORI || opcode == SLTI || opcode == SLTUI);
   assign #10 ALUOp[1] = (opcode == RFORMAT || opcode == ANDI || opcode == SLTUI);
-  assign #10 ALUOp[0] = (opcode == ANDI || opcode == BEQ || opcode == SLTI);
+  assign #10 ALUOp[0] = (opcode == ANDI || opcode == BEQ || opcode == BNE || opcode == SLTI);
   assign #10 MemDataSign = (opcode == LW || opcode == LB || opcode == LH || opcode == SW || opcode == SB || opcode == SH);
   assign #10 MemDataSize[1] = (opcode == LW || opcode == LH || opcode == LHU || opcode == SW || opcode == SH);
   assign #10 MemDataSize[0] = (opcode == LW || opcode == LB || opcode == LBU || opcode == SW || opcode == SB);
-  assign #10 SignExtend = !(opcode == ANDI || opcode == ORI || opcode == SLTUI);
+  assign #10 SignExtend = !(opcode == ANDI || opcode == ORI);
 
 endmodule
 
